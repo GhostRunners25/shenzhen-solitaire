@@ -1,0 +1,6 @@
+html, body {
+    padding: 0px;
+    margin: 0px;
+    background-color: #222222;
+    color: #ff0077; /* to highlight if a colour error occurs */
+}

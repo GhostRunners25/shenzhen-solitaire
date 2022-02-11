@@ -1,0 +1,29 @@
+@font-face {
+    font-family: "mono";
+    src: url("./fonts/ShareTechMono-Regular.ttf");
+}
+
+p {
+    font-family: "mono";
+    font-size: 24px;
+}
+
+.red {
+    color: #df4747;
+}
+
+.green {
+    color: #47df47;
+}
+
+.blue {
+    color: #4770df;
+}
+
+.dull {
+    opacity: 0.5;
+}
+
+.special {
+    color: #ffffff;
+}
