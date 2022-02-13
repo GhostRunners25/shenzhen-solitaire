@@ -2,11 +2,10 @@ import card from "./card.js";
 import { cardList } from "./card-list.js";
 
 function main() {
-
-    const elementAreas = ['swap-area', 'special-area', 'stack-area'];
     let allCards = [];
 
     function generateGame() {
+        const elementAreas = ['swap-area', 'special-area', 'stack-area'];
         elementAreas.forEach(element => {
             const children = document.getElementsByClassName(element)[0].children;
             for (let i = 0; i < children.length; i++) {
@@ -26,6 +25,16 @@ function main() {
             allCards.push(new card(i.toString(), cardList.symbol3.className));
         }
         shuffle();
+        for (let i = 1; i < 9; i++) {
+            const id = `play-area-stack-${i}`;
+            const element = document.getElementById(id);
+            let innerHTML = '';
+            for (let x = 0; x < 5; x++) {
+                const drawnCard = allCards.pop();
+                innerHTML += `<li><p class="${drawnCard.className}">${drawnCard.symbol}</p></li>`;
+            }
+            element.innerHTML = innerHTML;
+        }
     }
 
     function shuffle() {
