@@ -3,8 +3,4 @@ export default class card {
         this.symbol = symbol;
         this.className = className;
     }
-
-    values = () => {
-        return (this.symbol, this.className);
-    }
 }
