@@ -1,3 +1,5 @@
+import card from "./card";
+
 function main() {
 
     const symbol0 = '▯';
@@ -19,17 +21,6 @@ function main() {
     }
 
     generateGame();
-}
-
-class card {
-    constructor(symbol, className) {
-        this.symbol = symbol;
-        this.className = className;
-    }
-
-    values = () => {
-        return (this.symbol, this.className);
-    }
 }
 
 window.addEventListener('load', main);
