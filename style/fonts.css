@@ -24,6 +24,10 @@ p {
     opacity: 0.5;
 }
 
+.blank {
+    color: #ffffff;
+}
+
 .special {
     color: #ffffff;
 }

@@ -2,5 +2,34 @@ html, body {
     padding: 0px;
     margin: 0px;
     background-color: #222222;
-    color: #ff0077; /* to highlight if a colour error occurs */
+    color: #ff0074; /* to highlight if a colour error occurs */
+}
+
+.container {
+    width: 320px;
+}
+
+.swap-area, .special-area, .stack-area{
+    display: inline-flex;
+}
+
+.collect-area {
+    margin-top: 47px;
+    float: right;
+}
+
+.special-area {
+    margin: 0px 13px;
+}
+
+p {
+    margin: 10px;
+    cursor: pointer;
+}
+
+ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    float: left;
 }
