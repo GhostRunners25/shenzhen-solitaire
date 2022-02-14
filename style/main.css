@@ -6,7 +6,12 @@ html, body {
 }
 
 .container {
+    position: absolute;
     width: 320px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    user-select: none;
 }
 
 .swap-area, .special-area, .stack-area{
@@ -14,8 +19,10 @@ html, body {
 }
 
 .collect-area {
-    margin-top: 47px;
-    float: right;
+    display: inline-block;
+    position: absolute;
+    top: 47px;
+    right: 5px;
 }
 
 .special-area {

@@ -11,6 +11,7 @@ function main() {
             for (let i = 0; i < children.length; i++) {
                 children[i].innerHTML = cardList.symbol0.symbol;
                 children[i].className = cardList.symbol0.className;
+                children[i].setAttribute('onclick', '');
             }
         });
         allCards.push(new card(cardList.symbolS.symbol, cardList.symbolS.className));
@@ -31,7 +32,7 @@ function main() {
             let innerHTML = '';
             for (let x = 0; x < 5; x++) {
                 const drawnCard = allCards.pop();
-                innerHTML += `<li><p class="${drawnCard.className}">${drawnCard.symbol}</p></li>`;
+                innerHTML += `<li><p class="${drawnCard.className}" onclick="">${drawnCard.symbol}</p></li>`;
             }
             element.innerHTML = innerHTML;
         }
