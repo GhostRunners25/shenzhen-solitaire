@@ -1,17 +1,23 @@
 import card from "./card.js";
-import { cardList } from "./card-list.js";
+import { cardList, areaList } from "./common.js";
 
 function main() {
     let allCards = [];
 
+    const scoreArea = document.getElementById(areaList.score);
+    scoreArea.innerHTML = '0';
+    scoreArea.onclick = () => {
+        generateGame();
+    }
+
     function generateGame() {
-        const elementAreas = ['swap-area', 'special-area', 'stack-area'];
+        const elementAreas = [].concat(areaList.swap, areaList.stack, areaList.special);
         elementAreas.forEach(element => {
             const children = document.getElementsByClassName(element)[0].children;
             for (let i = 0; i < children.length; i++) {
                 children[i].innerHTML = cardList.symbol0.symbol;
                 children[i].className = cardList.symbol0.className;
-                children[i].setAttribute('onclick', '');
+                children[i].onclick = clicked;
             }
         });
         allCards.push(new card(cardList.symbolS.symbol, cardList.symbolS.className));
@@ -27,14 +33,17 @@ function main() {
         }
         shuffle();
         for (let i = 1; i < 9; i++) {
-            const id = `play-area-stack-${i}`;
-            const element = document.getElementById(id);
+            const element = document.getElementById(`play-area-stack-${i}`);
             let innerHTML = '';
             for (let x = 0; x < 5; x++) {
                 const drawnCard = allCards.pop();
-                innerHTML += `<li><p class="${drawnCard.className}" onclick="">${drawnCard.symbol}</p></li>`;
+                innerHTML += `<li><p class="${drawnCard.className}">${drawnCard.symbol}</p></li>`;
             }
             element.innerHTML = innerHTML;
+            const children = element.children;
+            for (let x = 0; x < children.length; x++) {
+                children[x].firstChild.onclick = clicked;
+            }
         }
     }
 
@@ -46,6 +55,11 @@ function main() {
             allCards[x] = z[1];
             allCards[y] = z[0];
         }
+    }
+
+    function clicked(event) {
+        const element = document.getElementById(event.target.id);
+        console.log(event);
     }
 
     const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min; // inc min, exc max

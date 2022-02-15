@@ -1,6 +1,6 @@
 export const cardList = {
     symbol0: {
-        symbol: '▯',
+        symbol: '-',
         className: 'blank',
     },
     symbol1: {
@@ -19,4 +19,11 @@ export const cardList = {
         symbol: '%',
         className: 'special'
     },
+}
+
+export const areaList = {
+    swap: 'swap-area',
+    stack: 'stack-area',
+    special: 'special-area',
+    score: 'score-area',
 }
