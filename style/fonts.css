@@ -6,6 +6,8 @@
 p {
     font-family: "mono";
     font-size: 24px;
+    cursor: pointer;
+    margin: 10px;
 }
 
 .red {
@@ -35,11 +37,21 @@ p {
 }
 
 .special {
-    color: #ffffff;
+    animation: rainbow infinite 0.5s alternate;
+}
+
+.special.selected {
+    animation: rainbow infinite 0.5s alternate, flash infinite 1s alternate;
 }
 
 .selected {
     animation: flash infinite 1s alternate;
+}
+
+@keyframes rainbow {
+    0% {color: #f0dd32;}
+    50% {color: #3cdcf1;}
+    100% {color: #ee40c8;}
 }
 
 @keyframes flash {

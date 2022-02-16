@@ -120,10 +120,10 @@ function main() {
         selectedCards.map(selectedCard => {
             selectedCard.className = selectedCard.className.replace(selectedClassName, '');
         });
-        setTimeout(syncSelectedAnimation, 100);
+        setTimeout(syncSelectedAnimations, 100);
     }
 
-    const syncSelectedAnimation = () => {
+    const syncSelectedAnimations = () => {
         selectedCards.map(selectedCard => {
             selectedCard.className += selectedClassName;
         })
