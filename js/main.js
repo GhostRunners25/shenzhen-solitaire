@@ -4,13 +4,11 @@ import { cardList, areaList } from "./common.js";
 function main() {
     let allCards = [];
     let selectedCards = [];
-    let selectedCardsStored = false;
 
     const scoreArea = document.getElementById(areaList.score);
     scoreArea.innerHTML = '0';
     scoreArea.onclick = () => {
         selectedCards = [];
-        selectedCardsStored = false;
         generateGame();
     }
 
@@ -62,14 +60,7 @@ function main() {
         }
     }
 
-    const selected = (element, deselect) => {
-        if (selectedCardsStored && !deselect) {
-            selectedCards.map(oldCard => {
-                oldCard.className = oldCard.className.replace(selectedClass, '');
-            });
-            selectedCards = [];
-        }
-        selectedCardsStored = false;
+    const selected = (element) => {
         if (element.className.includes(selectedClass)) {
             element.className = element.className.replace(selectedClass, '');
             selectedCards.pop(element);
@@ -83,42 +74,41 @@ function main() {
         const element = event.target;
         const parentElement = element.parentElement.parentElement;
         let elements = [];
-        let valid = false;
-        let digit;
+        let data = {
+            digit: NaN,
+            className: '',
+            valid: false,
+        }
+        if (element !== selectedCards[0]) {
+            selectedCards.map(oldCard => {
+                oldCard.className = oldCard.className.replace(selectedClass, '');
+            });
+            selectedCards = [];
+        }
         for (let i = 0; i < parentElement.children.length; i++) {
             const sibling = parentElement.children[i].firstChild;
             if (sibling === element) {
                 if (i === parentElement.children.length - 1) {
-                    selected(element, compareSelectedCards([element]));
+                    selected(element);
                 }
                 else {
-                    digit = parseInt(element.innerHTML);
-                    valid = digit !== NaN;
-                    if (valid) elements.push(element);
+                    data.digit = parseInt(element.innerHTML);
+                    data.className = element.className;
+                    data.valid = data.digit !== NaN;
+                    if (data.valid) elements.push(element);
                 }
-            } else if (valid) {
-                digit--;
-                valid = parseInt(sibling.innerHTML) === digit;
-                if (valid) elements.push(sibling);
+            } else if (data.valid) {
+                data.digit--;
+                data.valid = parseInt(sibling.innerHTML) === data.digit && sibling.className !== data.className;
+                data.className = sibling.className;
+                if (data.valid) elements.push(sibling);
             }
         }
-        if (valid) elements.map(validElement => selected(validElement, compareSelectedCards(elements)));
-        selectedCardsStored = true;
+        if (data.valid) elements.map(validElement => selected(validElement));
         selectedCards.map(selectedCard => {
             selectedCard.className = selectedCard.className.replace(selectedClass, '');
         });
         setTimeout(syncSelectedAnimations, 100);
-    }
-
-    const compareSelectedCards = (updatedSelectedCards) => {
-        if (selectedCards.length === updatedSelectedCards.length) {
-            for (let i = 0; i < selectedCards.length; i++) {
-                if (updatedSelectedCards[i] === selectedCards[0]) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     const syncSelectedAnimations = () => {
