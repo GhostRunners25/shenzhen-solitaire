@@ -3,20 +3,27 @@ import { cardList, areaList } from "./common.js";
 
 function main() {
     let allCards = [];
-    let selectedCards = [];
+    let selectedCards;
+
+    const selectedClassName = ' selected';
 
     const scoreArea = document.getElementById(areaList.score);
     scoreArea.innerHTML = '0';
     scoreArea.onclick = () => {
-        selectedCards = [];
         generateGame();
     }
 
-    const selectedClass = ' selected';
-
     function generateGame() {
-        const elementAreas = [].concat(areaList.swap, areaList.stack, areaList.special);
-        elementAreas.forEach(element => {
+        selectedCards = [];
+        generateTopArea();
+        generateCards();
+        shuffleCards(1000);
+        placeCards();
+    }
+
+    const generateTopArea = () => {
+        const topElementAreas = [].concat(areaList.swap, areaList.stack, areaList.special);
+        topElementAreas.forEach(element => {
             const children = document.getElementsByClassName(element)[0].children;
             for (let i = 0; i < children.length; i++) {
                 children[i].innerHTML = cardList.symbol0.symbol;
@@ -24,6 +31,9 @@ function main() {
                 children[i].onclick = () => { }; // change
             }
         });
+    }
+
+    const generateCards = () => {
         allCards.push(new card(cardList.symbolS.symbol, cardList.symbolS.className));
         for (let i = 0; i < 4; i++) {
             allCards.push(new card(cardList.symbol1.symbol, cardList.symbol1.className));
@@ -35,7 +45,19 @@ function main() {
             allCards.push(new card(i.toString(), cardList.symbol2.className));
             allCards.push(new card(i.toString(), cardList.symbol3.className));
         }
-        shuffle();
+    }
+
+    const shuffleCards = (amount) => {
+        for (let i = 0; i < amount; i++) {
+            const x = getRandomInt(0, allCards.length);
+            const y = getRandomInt(0, allCards.length);
+            const z = [allCards[x], allCards[y]];
+            allCards[x] = z[1];
+            allCards[y] = z[0];
+        }
+    }
+
+    const placeCards = () => {
         for (let i = 1; i < 9; i++) {
             const element = document.getElementById(`play-area-stack-${i}`);
             element.innerHTML = '';
@@ -50,22 +72,12 @@ function main() {
         }
     }
 
-    const shuffle = () => {
-        for (let i = 0; i < 1000; i++) {
-            const x = getRandomInt(0, allCards.length);
-            const y = getRandomInt(0, allCards.length);
-            const z = [allCards[x], allCards[y]];
-            allCards[x] = z[1];
-            allCards[y] = z[0];
-        }
-    }
-
-    const selected = (element) => {
-        if (element.className.includes(selectedClass)) {
-            element.className = element.className.replace(selectedClass, '');
+    const selectCard = (element) => {
+        if (element.className.includes(selectedClassName)) {
+            element.className = element.className.replace(selectedClassName, '');
             selectedCards.pop(element);
         } else {
-            element.className += selectedClass;
+            element.className += selectedClassName;
             selectedCards.push(element);
         }
     }
@@ -81,7 +93,7 @@ function main() {
         }
         if (element !== selectedCards[0]) {
             selectedCards.map(oldCard => {
-                oldCard.className = oldCard.className.replace(selectedClass, '');
+                oldCard.className = oldCard.className.replace(selectedClassName, '');
             });
             selectedCards = [];
         }
@@ -89,7 +101,7 @@ function main() {
             const sibling = parentElement.children[i].firstChild;
             if (sibling === element) {
                 if (i === parentElement.children.length - 1) {
-                    selected(element);
+                    selectCard(element);
                 }
                 else {
                     data.digit = parseInt(element.innerHTML);
@@ -104,16 +116,16 @@ function main() {
                 if (data.valid) elements.push(sibling);
             }
         }
-        if (data.valid) elements.map(validElement => selected(validElement));
+        if (data.valid) elements.map(validElement => selectCard(validElement));
         selectedCards.map(selectedCard => {
-            selectedCard.className = selectedCard.className.replace(selectedClass, '');
+            selectedCard.className = selectedCard.className.replace(selectedClassName, '');
         });
-        setTimeout(syncSelectedAnimations, 100);
+        setTimeout(syncSelectedAnimation, 100);
     }
 
-    const syncSelectedAnimations = () => {
+    const syncSelectedAnimation = () => {
         selectedCards.map(selectedCard => {
-            selectedCard.className += selectedClass;
+            selectedCard.className += selectedClassName;
         })
     }
 
