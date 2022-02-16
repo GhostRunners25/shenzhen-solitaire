@@ -37,3 +37,12 @@ p {
 .special {
     color: #ffffff;
 }
+
+.selected {
+    animation: flash infinite 1s alternate;
+}
+
+@keyframes flash {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}

@@ -3,12 +3,15 @@ import { cardList, areaList } from "./common.js";
 
 function main() {
     let allCards = [];
+    let selectedCards = [];
 
     const scoreArea = document.getElementById(areaList.score);
     scoreArea.innerHTML = '0';
     scoreArea.onclick = () => {
         generateGame();
     }
+
+    const selectedClass = ' selected';
 
     function generateGame() {
         const elementAreas = [].concat(areaList.swap, areaList.stack, areaList.special);
@@ -17,7 +20,7 @@ function main() {
             for (let i = 0; i < children.length; i++) {
                 children[i].innerHTML = cardList.symbol0.symbol;
                 children[i].className = cardList.symbol0.className;
-                children[i].onclick = clicked;
+                children[i].onclick = () => { }; // change
             }
         });
         allCards.push(new card(cardList.symbolS.symbol, cardList.symbolS.className));
@@ -34,20 +37,19 @@ function main() {
         shuffle();
         for (let i = 1; i < 9; i++) {
             const element = document.getElementById(`play-area-stack-${i}`);
-            let innerHTML = '';
+            element.innerHTML = '';
             for (let x = 0; x < 5; x++) {
                 const drawnCard = allCards.pop();
-                innerHTML += `<li><p class="${drawnCard.className}">${drawnCard.symbol}</p></li>`;
+                element.innerHTML += `<li><p class="${drawnCard.className}">${drawnCard.symbol}</p></li>`;
             }
-            element.innerHTML = innerHTML;
             const children = element.children;
             for (let x = 0; x < children.length; x++) {
-                children[x].firstChild.onclick = clicked;
+                children[x].firstChild.onclick = playAreaClicked;
             }
         }
     }
 
-    function shuffle() {
+    const shuffle = () => {
         for (let i = 0; i < 1000; i++) {
             const x = getRandomInt(0, allCards.length);
             const y = getRandomInt(0, allCards.length);
@@ -57,9 +59,40 @@ function main() {
         }
     }
 
-    function clicked(event) {
-        const element = document.getElementById(event.target.id);
-        console.log(event);
+    const selected = (element) => {
+        if (element.className.includes(selectedClass)) {
+            element.className = element.className.replace(selectedClass, '');
+            selectedCards.pop(element);
+        } else {
+            element.className += selectedClass;
+            selectedCards.push(element);
+        }
+    }
+
+    const playAreaClicked = (event) => {
+        const element = event.target;
+        const parentElement = element.parentElement.parentElement;
+        let elements = [];
+        let valid = false;
+        let digit;
+        for (let i = 0; i < parentElement.children.length; i++) {
+            const sibling = parentElement.children[i].firstChild;
+            if (sibling === element) {
+                if (i === parentElement.children.length - 1) {
+                    selected(element);
+                }
+                else {
+                    digit = parseInt(element.innerHTML);
+                    valid = digit !== NaN;
+                    if (valid) elements.push(element);
+                }
+            } else if (valid) {
+                digit--;
+                valid = parseInt(sibling.innerHTML) === digit;
+                if (valid) elements.push(sibling);
+            }
+        }
+        if (valid) elements.map(validElement => selected(validElement));
     }
 
     const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min; // inc min, exc max
