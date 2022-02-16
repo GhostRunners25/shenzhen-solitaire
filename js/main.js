@@ -4,10 +4,13 @@ import { cardList, areaList } from "./common.js";
 function main() {
     let allCards = [];
     let selectedCards = [];
+    let selectedCardsStored = false;
 
     const scoreArea = document.getElementById(areaList.score);
     scoreArea.innerHTML = '0';
     scoreArea.onclick = () => {
+        selectedCards = [];
+        selectedCardsStored = false;
         generateGame();
     }
 
@@ -59,7 +62,14 @@ function main() {
         }
     }
 
-    const selected = (element) => {
+    const selected = (element, deselect) => {
+        if (selectedCardsStored && !deselect) {
+            selectedCards.map(oldCard => {
+                oldCard.className = oldCard.className.replace(selectedClass, '');
+            });
+            selectedCards = [];
+        }
+        selectedCardsStored = false;
         if (element.className.includes(selectedClass)) {
             element.className = element.className.replace(selectedClass, '');
             selectedCards.pop(element);
@@ -79,7 +89,7 @@ function main() {
             const sibling = parentElement.children[i].firstChild;
             if (sibling === element) {
                 if (i === parentElement.children.length - 1) {
-                    selected(element);
+                    selected(element, compareSelectedCards([element]));
                 }
                 else {
                     digit = parseInt(element.innerHTML);
@@ -92,7 +102,29 @@ function main() {
                 if (valid) elements.push(sibling);
             }
         }
-        if (valid) elements.map(validElement => selected(validElement));
+        if (valid) elements.map(validElement => selected(validElement, compareSelectedCards(elements)));
+        selectedCardsStored = true;
+        selectedCards.map(selectedCard => {
+            selectedCard.className = selectedCard.className.replace(selectedClass, '');
+        });
+        setTimeout(syncSelectedAnimations, 100);
+    }
+
+    const compareSelectedCards = (updatedSelectedCards) => {
+        if (selectedCards.length === updatedSelectedCards.length) {
+            for (let i = 0; i < selectedCards.length; i++) {
+                if (updatedSelectedCards[i] === selectedCards[0]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    const syncSelectedAnimations = () => {
+        selectedCards.map(selectedCard => {
+            selectedCard.className += selectedClass;
+        })
     }
 
     const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min; // inc min, exc max
