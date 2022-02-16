@@ -18,7 +18,7 @@ function main() {
         generateTopArea();
         generateCards();
         shuffleCards(1000);
-        placeCards();
+        drawCards();
     }
 
     const generateTopArea = () => {
@@ -57,7 +57,7 @@ function main() {
         }
     }
 
-    const placeCards = () => {
+    const drawCards = () => {
         for (let i = 1; i < 9; i++) {
             const element = document.getElementById(`play-area-stack-${i}`);
             element.innerHTML = '';
